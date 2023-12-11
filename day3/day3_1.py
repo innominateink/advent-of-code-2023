@@ -43,27 +43,4 @@ for rowId, line in enumerate(lines):
         # if we picked up any symbols, it's a part number
         if len(chars) > 0:
             partNumberSum = partNumberSum + int(match.group()) # match.group returns the matched string
-
-    gears = re.finditer(r'\*', line)
-    for match in gears:
-        [pos, end] = match.span()
-        print(pos, end)
-        nums = []
-        # left
-        if pos > 0 and line[pos - 1].isnumeric():
-            nums.append(int(line[pos - 1]))
-        # right
-        if pos < len(line) and line[pos + 1].isnumeric():
-            nums.append(int(line[pos + 1]))
-        if rowId > 0:
-            topline = lines[rowId - 1][pos - 1:end + 1]
-            nums = nums + topline.strip('.').split('.')
-        if rowId < len(lines):
-            botline = lines[rowId + 1][pos - 1:end + 1]
-            nums = nums + botline.strip('.').split('.')
-
-        if len(nums) == 2:
-            gearratio = int(nums[0]) * int(nums[1])
-            print(pos, nums, gearratio)
-
 print('Part 1:', partNumberSum)
