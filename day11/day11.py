@@ -23,18 +23,22 @@ print(f'The empty columns are {empty_cols}')
 
 # galaxies
 gs = [(r, c) for r in range(len(u)) for c in range(len(u[0])) if u[r][c] == '#']
-print(f'There are {len(gs)} galaxies:\n{gs}')
 gsl = len(gs)
+print(f'There are {gsl} galaxies:\n{gs}')
 
 # distances between unique pairs of galaxies
-distances = []
+distancespt1 = []
+distancespt2 = []
 for idg, g, in enumerate(gs):
     for idh in range(idg+1, gsl):
-        print(f'Pair {g} {gs[idh]}')
-        rows_between = [c for c in empty_rows if g[0] < c < gs[idh][0]]
-        print('Rows between:', rows_between)
-        cols_between = [r for r in empty_cols if g[1] < r < gs[idh][1]]
-        print('Columns between:', cols_between)
-        distances.append(distance_between(g, gs[idh]) + (len(rows_between) + len(cols_between)))
+        xs, ys = [sorted((a,b)) for a,b in list(zip(g, gs[idh]))]
+        rows_between = len([r for r in empty_rows if xs[0] < r < xs[1]])
+        cols_between = len([r for r in empty_cols if ys[0] < r < ys[1]])
+        # add one extra row per row between
+        distancespt1.append(distance_between(g, gs[idh]) + rows_between + cols_between)
+        # add one million rows per row between
+        factor = 1000000
+        distancespt2.append(distance_between(g, gs[idh]) + (rows_between * (factor - 1)) + (cols_between * (factor - 1)))
 
-print(f'The sum of all distances between pairs of galaxies is {sum(distances)}')
+print(f'The part 1 solution is {sum(distancespt1)}')
+print(f'The part 2 solution is {sum(distancespt2)}')
